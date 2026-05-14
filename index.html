@@ -1,0 +1,1232 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no, viewport-fit=cover">
+  <meta name="apple-mobile-web-app-capable" content="yes">
+  <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+  <meta name="theme-color" content="#fd297b">
+  <title>Apartment Tinder · Happy Birthday Joanne</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Lilita+One&display=swap" rel="stylesheet">
+  <style>
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+    :root {
+      --tinder-pink: #fd297b;
+      --tinder-orange: #ff5864;
+      --tinder-red: #ff655b;
+      --tinder-grad: linear-gradient(135deg, #fd297b 0%, #ff5864 50%, #ff655b 100%);
+      --green: #4ddc77;
+      --red: #ec5e6f;
+      --ink: #1a1a1a;
+      --muted: #888;
+      --soft: #f4f4f6;
+      --shadow-card: 0 12px 40px rgba(0,0,0,0.18), 0 2px 6px rgba(0,0,0,0.08);
+      --shadow-btn: 0 6px 18px rgba(0,0,0,0.15);
+    }
+
+    html, body {
+      height: 100%;
+      overflow: hidden;
+      overscroll-behavior: none;
+      -webkit-tap-highlight-color: transparent;
+      -webkit-user-select: none;
+      user-select: none;
+      touch-action: none;
+    }
+
+    body {
+      font-family: -apple-system, BlinkMacSystemFont, "SF Pro Display", "SF Pro Text", system-ui, sans-serif;
+      background: #0d0d10;
+      color: var(--ink);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      min-height: 100dvh;
+    }
+
+    .app {
+      width: 100%;
+      max-width: 430px;
+      height: 100dvh;
+      max-height: 100dvh;
+      background: white;
+      position: relative;
+      overflow: hidden;
+      display: flex;
+      flex-direction: column;
+    }
+
+    @media (min-width: 500px) {
+      .app {
+        height: 92vh;
+        max-height: 900px;
+        border-radius: 50px;
+        box-shadow: 0 30px 100px rgba(0,0,0,0.5), 0 0 0 11px #1a1a1a, 0 0 0 13px #333;
+      }
+      body { padding: 20px; }
+    }
+
+    .screen {
+      position: absolute;
+      inset: 0;
+      display: flex;
+      flex-direction: column;
+      opacity: 0;
+      pointer-events: none;
+      transition: opacity 0.4s ease;
+    }
+
+    .screen.active { opacity: 1; pointer-events: auto; }
+
+    /* ============ LOGIN ============ */
+    .login-screen {
+      background: var(--tinder-grad);
+      color: white;
+      text-align: center;
+      padding: 40px 30px 36px;
+      justify-content: space-between;
+    }
+
+    .login-flame {
+      font-size: 72px;
+      margin-top: 60px;
+      filter: drop-shadow(0 6px 20px rgba(0,0,0,0.25));
+      animation: flameFlicker 2.5s ease-in-out infinite;
+    }
+    @keyframes flameFlicker {
+      0%,100% { transform: scale(1) rotate(-2deg); }
+      50% { transform: scale(1.05) rotate(2deg); }
+    }
+
+    .login-logo {
+      font-family: "Lilita One", system-ui, sans-serif;
+      font-size: 54px;
+      letter-spacing: -1.5px;
+      line-height: 0.95;
+      margin-top: 14px;
+      text-shadow: 0 4px 30px rgba(0,0,0,0.15);
+    }
+
+    .login-tagline {
+      font-size: 17px;
+      font-weight: 500;
+      opacity: 0.95;
+      margin-top: 14px;
+      letter-spacing: 0.1px;
+      line-height: 1.4;
+    }
+
+    .login-bottom { flex: 0 0 auto; }
+
+    .login-button {
+      background: white;
+      color: var(--tinder-orange);
+      border: none;
+      border-radius: 100px;
+      padding: 19px 30px;
+      font-size: 17px;
+      font-weight: 700;
+      width: 100%;
+      cursor: pointer;
+      box-shadow: 0 10px 30px rgba(0,0,0,0.18);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      gap: 14px;
+      transition: transform 0.15s;
+      font-family: inherit;
+    }
+    .login-button:active { transform: scale(0.97); }
+
+    .avatar-bubble {
+      width: 32px;
+      height: 32px;
+      border-radius: 50%;
+      background: linear-gradient(135deg, #fbb6ce, #fd297b);
+      color: white;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-weight: 800;
+      font-size: 14px;
+    }
+
+    .login-footer {
+      font-size: 11px;
+      opacity: 0.78;
+      margin-top: 16px;
+      line-height: 1.55;
+      padding: 0 6px;
+    }
+
+    /* ============ CARD SCREEN ============ */
+    .card-screen {
+      background: linear-gradient(180deg, #fff7f7 0%, #fde7e9 100%);
+    }
+
+    .app-header {
+      flex: 0 0 auto;
+      padding: 16px 20px 14px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      gap: 8px;
+      background: white;
+      border-bottom: 1px solid #f0eef0;
+    }
+    .app-header-flame { font-size: 22px; }
+    .app-header-logo {
+      font-family: "Lilita One", sans-serif;
+      font-size: 22px;
+      background: var(--tinder-grad);
+      -webkit-background-clip: text;
+      background-clip: text;
+      color: transparent;
+      letter-spacing: -0.5px;
+    }
+
+    .card-stack {
+      flex: 1;
+      position: relative;
+      padding: 14px;
+      overflow: hidden;
+    }
+
+    .card {
+      position: absolute;
+      inset: 14px;
+      background: white;
+      border-radius: 18px;
+      overflow: hidden;
+      box-shadow: var(--shadow-card);
+      display: flex;
+      flex-direction: column;
+      cursor: grab;
+      will-change: transform;
+      transition: transform 0.35s cubic-bezier(0.34, 1.56, 0.64, 1), opacity 0.35s;
+    }
+    .card.dragging { transition: none; cursor: grabbing; }
+    .card.fly-left  { transform: translateX(-160%) rotate(-30deg) !important; opacity: 0; }
+    .card.fly-right { transform: translateX(160%) rotate(30deg) !important; opacity: 0; }
+    .card.shake     { animation: shake 0.55s cubic-bezier(0.36, 0.07, 0.19, 0.97); }
+
+    @keyframes shake {
+      0%,100% { transform: translateX(0) rotate(0); }
+      15%     { transform: translateX(-14px) rotate(-3deg); }
+      30%     { transform: translateX(12px)  rotate(3deg); }
+      45%     { transform: translateX(-10px) rotate(-2deg); }
+      60%     { transform: translateX(8px)   rotate(2deg); }
+      75%     { transform: translateX(-5px)  rotate(-1deg); }
+      90%     { transform: translateX(3px)   rotate(0); }
+    }
+
+    .card-image {
+      flex: 1;
+      position: relative;
+      overflow: hidden;
+      background: #f0f0f0;
+      pointer-events: none;
+    }
+    .card-image svg { width: 100%; height: 100%; display: block; }
+
+    .card-stamp {
+      position: absolute;
+      top: 28px;
+      padding: 6px 16px;
+      font-family: "Lilita One", sans-serif;
+      font-size: 30px;
+      letter-spacing: 2px;
+      border: 5px solid;
+      border-radius: 10px;
+      opacity: 0;
+      transition: opacity 0.05s;
+      text-transform: uppercase;
+      pointer-events: none;
+    }
+    .card-stamp-nope { right: 22px; color: var(--red);   border-color: var(--red);   transform: rotate(18deg); }
+    .card-stamp-like { left: 22px;  color: var(--green); border-color: var(--green); transform: rotate(-18deg); }
+
+    .card-overlay {
+      position: absolute;
+      bottom: 0; left: 0; right: 0;
+      padding: 60px 20px 16px;
+      background: linear-gradient(to top, rgba(0,0,0,0.85) 0%, rgba(0,0,0,0.4) 65%, transparent 100%);
+      color: white;
+    }
+    .card-name {
+      font-size: 26px;
+      font-weight: 800;
+      letter-spacing: -0.3px;
+      display: flex;
+      align-items: baseline;
+      gap: 8px;
+      line-height: 1.1;
+    }
+    .card-age {
+      font-size: 20px;
+      font-weight: 300;
+      opacity: 0.95;
+    }
+    .card-location {
+      font-size: 14px;
+      opacity: 0.92;
+      margin-top: 4px;
+    }
+
+    .card-details {
+      background: white;
+      padding: 14px 18px 14px;
+      flex: 0 0 auto;
+      max-height: 38%;
+      overflow: hidden;
+    }
+    .card-tagline {
+      font-size: 13px;
+      font-style: italic;
+      color: var(--tinder-orange);
+      font-weight: 600;
+      margin-bottom: 10px;
+      line-height: 1.3;
+    }
+    .card-bio {
+      list-style: none;
+      font-size: 13.5px;
+      line-height: 1.45;
+      color: #333;
+    }
+    .card-bio li {
+      padding: 3px 0;
+      padding-left: 26px;
+      position: relative;
+    }
+    .card-bio li .icon {
+      position: absolute;
+      left: 0;
+      top: 2px;
+      font-size: 15px;
+    }
+
+    /* ============ ACTION BUTTONS ============ */
+    .action-buttons {
+      flex: 0 0 auto;
+      padding: 14px 30px 22px;
+      display: flex;
+      gap: 28px;
+      justify-content: center;
+      align-items: center;
+    }
+    .action-btn {
+      width: 62px;
+      height: 62px;
+      border-radius: 50%;
+      background: white;
+      border: none;
+      box-shadow: var(--shadow-btn);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      cursor: pointer;
+      transition: transform 0.15s, box-shadow 0.15s;
+      padding: 0;
+    }
+    .action-btn:active { transform: scale(0.88); box-shadow: 0 2px 8px rgba(0,0,0,0.1); }
+    .action-btn svg { width: 28px; height: 28px; }
+    .action-btn-nope svg { stroke: var(--red); }
+    .action-btn-like { width: 70px; height: 70px; }
+    .action-btn-like svg { width: 34px; height: 34px; fill: var(--green); }
+
+    /* ============ TOAST ============ */
+    .toast {
+      position: absolute;
+      top: 86px;
+      left: 50%;
+      transform: translate(-50%, -120%);
+      background: rgba(20,20,22,0.93);
+      color: white;
+      padding: 12px 22px;
+      border-radius: 100px;
+      font-size: 14px;
+      font-weight: 600;
+      box-shadow: var(--shadow-btn);
+      opacity: 0;
+      transition: all 0.4s cubic-bezier(0.34, 1.56, 0.64, 1);
+      z-index: 100;
+      white-space: nowrap;
+      backdrop-filter: blur(8px);
+      max-width: 90%;
+    }
+    .toast.visible { transform: translate(-50%, 0); opacity: 1; }
+
+    /* ============ MATCH SCREEN ============ */
+    .match-screen {
+      background: var(--tinder-grad);
+      color: white;
+      text-align: center;
+      padding: 36px 28px;
+      justify-content: space-evenly;
+      align-items: center;
+      overflow: hidden;
+    }
+
+    .match-title {
+      font-family: "Lilita One", sans-serif;
+      font-size: 60px;
+      line-height: 0.95;
+      letter-spacing: -1px;
+      text-shadow: 0 4px 30px rgba(0,0,0,0.2);
+      animation: matchPop 0.7s cubic-bezier(0.34, 1.56, 0.64, 1) both;
+    }
+    .match-subtitle {
+      font-size: 20px;
+      font-weight: 600;
+      margin-top: 4px;
+      animation: matchPop 0.7s cubic-bezier(0.34, 1.56, 0.64, 1) 0.15s both;
+    }
+    @keyframes matchPop {
+      0%   { transform: scale(0.3); opacity: 0; }
+      100% { transform: scale(1);   opacity: 1; }
+    }
+
+    .match-avatars {
+      display: flex;
+      justify-content: center;
+      gap: 18px;
+      align-items: center;
+      animation: matchPop 0.7s cubic-bezier(0.34, 1.56, 0.64, 1) 0.3s both;
+    }
+    .match-avatar {
+      width: 96px;
+      height: 96px;
+      border-radius: 50%;
+      background: white;
+      box-shadow: 0 10px 40px rgba(0,0,0,0.25);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 50px;
+      overflow: hidden;
+    }
+    .match-avatar svg { width: 96px; height: 96px; display: block; }
+    .match-heart {
+      font-size: 44px;
+      animation: heartbeat 1s ease-in-out infinite;
+    }
+    @keyframes heartbeat {
+      0%,100% { transform: scale(1); }
+      50%     { transform: scale(1.18); }
+    }
+
+    .match-message {
+      font-size: 17px;
+      line-height: 1.55;
+      opacity: 0.97;
+      animation: matchPop 0.7s cubic-bezier(0.34, 1.56, 0.64, 1) 0.45s both;
+      padding: 0 6px;
+    }
+    .match-from {
+      font-size: 13px;
+      margin-top: 14px;
+      opacity: 0.85;
+      letter-spacing: 0.3px;
+    }
+
+    .match-cta {
+      background: white;
+      color: var(--tinder-orange);
+      border: none;
+      border-radius: 100px;
+      padding: 20px 30px;
+      font-size: 17px;
+      font-weight: 800;
+      width: 100%;
+      cursor: pointer;
+      box-shadow: 0 12px 40px rgba(0,0,0,0.25);
+      animation: matchPop 0.7s cubic-bezier(0.34, 1.56, 0.64, 1) 0.6s both;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      gap: 10px;
+      font-family: inherit;
+      text-decoration: none;
+      transition: transform 0.15s;
+    }
+    .match-cta:active { transform: scale(0.97); }
+
+    .confetti {
+      position: absolute;
+      width: 8px;
+      height: 14px;
+      top: -20px;
+      animation: confettiFall linear infinite;
+      pointer-events: none;
+      opacity: 0;
+    }
+    @keyframes confettiFall {
+      0%   { transform: translateY(0) rotate(0); opacity: 1; }
+      100% { transform: translateY(110vh) rotate(720deg); opacity: 0; }
+    }
+
+  </style>
+</head>
+<body>
+  <div class="app">
+
+    <!-- ========== LOGIN SCREEN ========== -->
+    <div class="screen login-screen active" id="login-screen">
+      <div>
+        <div class="login-flame">🔥</div>
+        <div class="login-logo">apartment<br>tinder</div>
+        <div class="login-tagline">Swipe your way to the perfect stay™</div>
+      </div>
+      <div class="login-bottom">
+        <button class="login-button" onclick="goToCards()">
+          <span class="avatar-bubble">J</span>
+          Continue as Joanne
+        </button>
+        <div class="login-footer">
+          By tapping Continue you agree to put your faith in your son-in-law's taste in apartments. Results may include sea views, silence, and the complete absence of Gary.
+        </div>
+      </div>
+    </div>
+
+    <!-- ========== CARD SCREEN ========== -->
+    <div class="screen card-screen" id="card-screen">
+      <div class="app-header">
+        <span class="app-header-flame">🔥</span>
+        <span class="app-header-logo">apartment tinder</span>
+      </div>
+      <div class="card-stack" id="card-stack"></div>
+      <div class="action-buttons">
+        <button class="action-btn action-btn-nope" onclick="buttonSwipe('left')" aria-label="Nope">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round">
+            <path d="M6 6 L18 18 M6 18 L18 6"/>
+          </svg>
+        </button>
+        <button class="action-btn action-btn-like" onclick="buttonSwipe('right')" aria-label="Like">
+          <svg viewBox="0 0 24 24">
+            <path d="M12 21.35l-1.45-1.32C5.4 15.36 2 12.28 2 8.5 2 5.42 4.42 3 7.5 3c1.74 0 3.41.81 4.5 2.09C13.09 3.81 14.76 3 16.5 3 19.58 3 22 5.42 22 8.5c0 3.78-3.4 6.86-8.55 11.54L12 21.35z"/>
+          </svg>
+        </button>
+      </div>
+    </div>
+
+    <!-- ========== MATCH SCREEN ========== -->
+    <div class="screen match-screen" id="match-screen">
+      <div></div>
+      <div>
+        <div class="match-title">it's a match!</div>
+        <div class="match-subtitle">You're staying here ✨</div>
+      </div>
+      <div class="match-avatars">
+        <div class="match-avatar">👩</div>
+        <div class="match-heart">💖</div>
+        <div class="match-avatar" id="match-apt-avatar"></div>
+      </div>
+      <div class="match-message">
+        Happy Birthday, Joanne! 🎂<br>
+        <strong>Thodoris Infinity View Apartments</strong> in Symi is waiting for you. Zero tourist traps. Zero loud chewers. Just sea, sky, and a balcony that goes on forever.
+        <div class="match-from">— with love from Jake</div>
+      </div>
+      <a class="match-cta" href="https://www.booking.com/hotel/gr/thodoris-infinity-view-3g-apartment.en-gb.html" target="_blank" rel="noopener">
+        Take me there →
+      </a>
+    </div>
+
+    <div class="toast" id="toast"></div>
+  </div>
+
+  <script>
+    // ==================== SVG ILLUSTRATIONS ====================
+
+    const SVG_TOURIST_TRAP = `
+<svg viewBox="0 0 400 500" preserveAspectRatio="xMidYMid slice" xmlns="http://www.w3.org/2000/svg">
+  <defs>
+    <linearGradient id="ttSky" x1="0" y1="0" x2="0" y2="1">
+      <stop offset="0%" stop-color="#ff3399"/>
+      <stop offset="55%" stop-color="#ff9933"/>
+      <stop offset="100%" stop-color="#ffdd33"/>
+    </linearGradient>
+    <pattern id="ttStripes" patternUnits="userSpaceOnUse" width="18" height="18" patternTransform="rotate(45)">
+      <rect width="9" height="18" fill="#ff4757"/>
+      <rect x="9" width="9" height="18" fill="white"/>
+    </pattern>
+  </defs>
+
+  <!-- Sky -->
+  <rect width="400" height="320" fill="url(#ttSky)"/>
+
+  <!-- Sun with sunglasses -->
+  <g transform="translate(70 85)">
+    <g stroke="#fff200" stroke-width="5" stroke-linecap="round">
+      <line x1="0" y1="-52" x2="0" y2="-42"/>
+      <line x1="37" y1="-37" x2="30" y2="-30"/>
+      <line x1="52" y1="0" x2="42" y2="0"/>
+      <line x1="37" y1="37" x2="30" y2="30"/>
+      <line x1="0" y1="52" x2="0" y2="42"/>
+      <line x1="-37" y1="37" x2="-30" y2="30"/>
+      <line x1="-52" y1="0" x2="-42" y2="0"/>
+      <line x1="-37" y1="-37" x2="-30" y2="-30"/>
+    </g>
+    <circle r="35" fill="#fff200"/>
+    <rect x="-26" y="-8" width="52" height="3" fill="#1a1a1a"/>
+    <ellipse cx="-13" cy="-2" rx="11" ry="8" fill="#1a1a1a"/>
+    <ellipse cx="13" cy="-2" rx="11" ry="8" fill="#1a1a1a"/>
+    <ellipse cx="-10" cy="-4" rx="4" ry="3" fill="#fff" opacity="0.6"/>
+    <ellipse cx="16" cy="-4" rx="4" ry="3" fill="#fff" opacity="0.6"/>
+    <path d="M-10 14 Q0 24 10 14" stroke="#1a1a1a" stroke-width="3" fill="none" stroke-linecap="round"/>
+  </g>
+
+  <!-- Sea -->
+  <rect y="280" width="400" height="80" fill="#4ec5d4"/>
+  <path d="M0 282 Q60 277 120 282 T240 282 T400 282 L400 290 L0 290 Z" fill="#3aabbb" opacity="0.6"/>
+
+  <!-- Cruise ship -->
+  <g transform="translate(245 245)">
+    <rect x="0" y="22" width="100" height="22" fill="white" stroke="#333" stroke-width="1.5"/>
+    <rect x="10" y="0" width="70" height="22" fill="white" stroke="#333" stroke-width="1.5"/>
+    <rect x="30" y="-15" width="22" height="15" fill="white" stroke="#333" stroke-width="1.5"/>
+    <g fill="#4a90e2">
+      <circle cx="18" cy="33" r="2"/><circle cx="28" cy="33" r="2"/><circle cx="38" cy="33" r="2"/>
+      <circle cx="48" cy="33" r="2"/><circle cx="58" cy="33" r="2"/><circle cx="68" cy="33" r="2"/>
+      <circle cx="78" cy="33" r="2"/><circle cx="88" cy="33" r="2"/>
+      <circle cx="20" cy="11" r="2"/><circle cx="30" cy="11" r="2"/><circle cx="40" cy="11" r="2"/>
+      <circle cx="50" cy="11" r="2"/><circle cx="60" cy="11" r="2"/><circle cx="70" cy="11" r="2"/>
+    </g>
+    <line x1="50" y1="-15" x2="50" y2="-28" stroke="#333" stroke-width="1.5"/>
+    <path d="M50 -28 L62 -25 L50 -22 Z" fill="#ff4757"/>
+    <!-- smoke -->
+    <circle cx="20" cy="-5" r="6" fill="#999" opacity="0.7"/>
+    <circle cx="15" cy="-12" r="5" fill="#aaa" opacity="0.6"/>
+    <circle cx="22" cy="-18" r="6" fill="#bbb" opacity="0.5"/>
+  </g>
+
+  <!-- Building stripey awning -->
+  <rect x="20" y="155" width="360" height="42" fill="url(#ttStripes)"/>
+  <rect x="50" y="162" width="300" height="28" fill="#fff200" stroke="#1a1a1a" stroke-width="2.5"/>
+  <text x="200" y="183" text-anchor="middle" font-family="Impact, Arial Black, sans-serif" font-size="20" fill="#ff4757" font-weight="900">★ TOURIST TRAP TOWERS ★</text>
+
+  <!-- Building main -->
+  <rect x="40" y="195" width="320" height="180" fill="#ff4757"/>
+
+  <!-- I ♥ GREECE sign -->
+  <rect x="80" y="210" width="240" height="62" fill="white" stroke="#1a1a1a" stroke-width="3"/>
+  <text x="200" y="256" text-anchor="middle" font-family="Impact, Arial Black, sans-serif" font-size="38" font-weight="900">
+    <tspan fill="#1a1a1a">I </tspan>
+    <tspan fill="#ff4757">♥</tspan>
+    <tspan fill="#1a1a1a"> GREECE</tspan>
+  </text>
+
+  <!-- SALE sticker -->
+  <g transform="translate(345 215) rotate(15)">
+    <circle r="30" fill="#fff200" stroke="#ff4757" stroke-width="3"/>
+    <text y="-2" text-anchor="middle" font-family="Impact, sans-serif" font-size="13" font-weight="900" fill="#ff4757">SALE</text>
+    <text y="11" text-anchor="middle" font-family="Impact, sans-serif" font-size="8" fill="#1a1a1a">ON SOULS</text>
+  </g>
+
+  <!-- Windows with tacky stuff -->
+  <g>
+    <rect x="80" y="290" width="46" height="46" fill="#fff200" stroke="#1a1a1a" stroke-width="2"/>
+    <text x="103" y="322" text-anchor="middle" font-size="26">🏛️</text>
+
+    <rect x="177" y="290" width="46" height="46" fill="#fff200" stroke="#1a1a1a" stroke-width="2"/>
+    <text x="200" y="322" text-anchor="middle" font-size="24">📸</text>
+
+    <rect x="274" y="290" width="46" height="46" fill="#fff200" stroke="#1a1a1a" stroke-width="2"/>
+    <text x="297" y="322" text-anchor="middle" font-size="24">🥤</text>
+  </g>
+
+  <!-- Pavement -->
+  <rect y="375" width="400" height="125" fill="#d9c9a8"/>
+
+  <!-- Souvenir stand -->
+  <rect x="20" y="400" width="180" height="50" fill="#8b4513" stroke="#1a1a1a" stroke-width="2"/>
+  <rect x="30" y="380" width="160" height="24" fill="#ff4757" stroke="#1a1a1a" stroke-width="2"/>
+  <text x="110" y="397" text-anchor="middle" font-family="Impact, sans-serif" font-size="13" fill="white" font-weight="900">€€ AUTHENTIC €€</text>
+
+  <!-- Plastic Parthenons on the stand -->
+  <g fill="white" stroke="#1a1a1a" stroke-width="1">
+    <g transform="translate(40 392)">
+      <rect x="0" y="0" width="18" height="8"/>
+      <rect x="1" y="-8" width="2.5" height="8"/>
+      <rect x="6" y="-8" width="2.5" height="8"/>
+      <rect x="11" y="-8" width="2.5" height="8"/>
+      <rect x="15" y="-8" width="2.5" height="8"/>
+      <polygon points="-1,-8 19,-8 9,-16"/>
+    </g>
+    <g transform="translate(75 392)">
+      <rect x="0" y="0" width="18" height="8"/>
+      <rect x="1" y="-8" width="2.5" height="8"/>
+      <rect x="6" y="-8" width="2.5" height="8"/>
+      <rect x="11" y="-8" width="2.5" height="8"/>
+      <rect x="15" y="-8" width="2.5" height="8"/>
+      <polygon points="-1,-8 19,-8 9,-16"/>
+    </g>
+    <g transform="translate(110 392)">
+      <rect x="0" y="0" width="18" height="8"/>
+      <rect x="1" y="-8" width="2.5" height="8"/>
+      <rect x="6" y="-8" width="2.5" height="8"/>
+      <rect x="11" y="-8" width="2.5" height="8"/>
+      <rect x="15" y="-8" width="2.5" height="8"/>
+      <polygon points="-1,-8 19,-8 9,-16"/>
+    </g>
+    <g transform="translate(150 392)">
+      <rect x="0" y="0" width="18" height="8"/>
+      <rect x="1" y="-8" width="2.5" height="8"/>
+      <rect x="6" y="-8" width="2.5" height="8"/>
+      <rect x="11" y="-8" width="2.5" height="8"/>
+      <rect x="15" y="-8" width="2.5" height="8"/>
+      <polygon points="-1,-8 19,-8 9,-16"/>
+    </g>
+  </g>
+
+  <!-- Tourist with selfie stick -->
+  <g transform="translate(280 410)">
+    <circle cx="0" cy="0" r="9" fill="#f5c79b"/>
+    <rect x="-3" y="-14" width="6" height="6" fill="#ff4757"/>
+    <text x="0" y="-9" text-anchor="middle" font-size="6" fill="white" font-weight="900">I♥GR</text>
+    <rect x="-7" y="8" width="14" height="22" fill="#3a8aae"/>
+    <line x1="6" y1="-2" x2="22" y2="-22" stroke="#1a1a1a" stroke-width="2"/>
+    <rect x="20" y="-28" width="10" height="8" fill="#1a1a1a"/>
+    <rect x="21" y="-27" width="8" height="6" fill="#4a90e2"/>
+  </g>
+
+  <!-- Hawker -->
+  <g transform="translate(220 415)">
+    <circle cx="0" cy="0" r="9" fill="#d4a574"/>
+    <rect x="-8" y="8" width="16" height="22" fill="#ffa502"/>
+    <text x="0" y="22" text-anchor="middle" font-size="6" fill="#1a1a1a" font-weight="900">SIR! SIR!</text>
+  </g>
+</svg>`.trim();
+
+    const SVG_CHOMPYS = `
+<svg viewBox="0 0 400 500" preserveAspectRatio="xMidYMid slice" xmlns="http://www.w3.org/2000/svg">
+  <defs>
+    <linearGradient id="chBg" x1="0" y1="0" x2="0" y2="1">
+      <stop offset="0%" stop-color="#f5a623"/>
+      <stop offset="100%" stop-color="#a86400"/>
+    </linearGradient>
+    <radialGradient id="chMouth" cx="0.5" cy="0.5">
+      <stop offset="0%" stop-color="#6a1a1a"/>
+      <stop offset="100%" stop-color="#1a0505"/>
+    </radialGradient>
+  </defs>
+
+  <rect width="400" height="500" fill="url(#chBg)"/>
+
+  <!-- Cafeteria silhouette -->
+  <rect x="20" y="40" width="100" height="140" fill="#7a4500" opacity="0.45"/>
+  <rect x="280" y="50" width="100" height="130" fill="#7a4500" opacity="0.45"/>
+  <g fill="#fff200" opacity="0.55">
+    <rect x="35" y="60" width="18" height="22"/>
+    <rect x="65" y="60" width="18" height="22"/>
+    <rect x="95" y="60" width="18" height="22"/>
+    <rect x="35" y="95" width="18" height="22"/>
+    <rect x="65" y="95" width="18" height="22"/>
+    <rect x="35" y="130" width="18" height="22"/>
+    <rect x="65" y="130" width="18" height="22"/>
+    <rect x="295" y="70" width="18" height="22"/>
+    <rect x="325" y="70" width="18" height="22"/>
+    <rect x="355" y="70" width="18" height="22"/>
+    <rect x="295" y="105" width="18" height="22"/>
+    <rect x="325" y="105" width="18" height="22"/>
+  </g>
+
+  <!-- "MUNCH" comic burst (top-left) -->
+  <g transform="translate(85 130) rotate(-12)">
+    <path d="M-58 0 L-38 -28 L-22 -16 L-5 -34 L8 -12 L28 -28 L40 -8 L58 -22 L65 4 L48 22 L26 16 L10 32 L-12 22 L-26 34 L-44 18 L-60 28 Z"
+          fill="#fff200" stroke="#1a1a1a" stroke-width="3"/>
+    <text y="8" text-anchor="middle" font-family="Impact, Arial Black, sans-serif" font-size="26" font-weight="900" fill="#1a1a1a">MUNCH!</text>
+  </g>
+
+  <!-- Big chomping mouth -->
+  <g transform="translate(200 275)">
+    <!-- Lips -->
+    <ellipse rx="125" ry="85" fill="#d94d4d"/>
+    <ellipse rx="123" ry="83" fill="#c33838"/>
+    <!-- Mouth interior -->
+    <ellipse rx="105" ry="65" fill="url(#chMouth)"/>
+    <!-- Tongue -->
+    <ellipse cy="22" rx="65" ry="28" fill="#e85d6f"/>
+    <ellipse cy="18" rx="40" ry="14" fill="#f5798a" opacity="0.5"/>
+    <!-- Top teeth -->
+    <g fill="white" stroke="#ccc" stroke-width="0.7">
+      <rect x="-95" y="-58" width="22" height="26" rx="3"/>
+      <rect x="-70" y="-60" width="22" height="28" rx="3"/>
+      <rect x="-45" y="-62" width="22" height="30" rx="3"/>
+      <rect x="-20" y="-62" width="22" height="30" rx="3"/>
+      <rect x="5"   y="-62" width="22" height="30" rx="3"/>
+      <rect x="30"  y="-60" width="22" height="28" rx="3"/>
+      <rect x="55"  y="-58" width="22" height="26" rx="3"/>
+      <rect x="78"  y="-55" width="18" height="23" rx="3"/>
+    </g>
+    <!-- Bottom teeth -->
+    <g fill="white" stroke="#ccc" stroke-width="0.7">
+      <rect x="-90" y="42" width="20" height="20" rx="3"/>
+      <rect x="-66" y="44" width="20" height="22" rx="3"/>
+      <rect x="-42" y="46" width="20" height="22" rx="3"/>
+      <rect x="-18" y="46" width="20" height="22" rx="3"/>
+      <rect x="6"   y="46" width="20" height="22" rx="3"/>
+      <rect x="30"  y="44" width="20" height="22" rx="3"/>
+      <rect x="54"  y="42" width="20" height="20" rx="3"/>
+      <rect x="76"  y="40" width="17" height="18" rx="3"/>
+    </g>
+    <!-- Food bits -->
+    <circle cx="-25" cy="8"  r="6" fill="#f4d27a"/>
+    <circle cx="15"  cy="-2" r="4" fill="#f4d27a"/>
+    <circle cx="45"  cy="14" r="5" fill="#90c47e"/>
+    <circle cx="-50" cy="22" r="3" fill="#f4d27a"/>
+    <ellipse cx="0" cy="-18" rx="8" ry="3" fill="#c3753a"/>
+  </g>
+
+  <!-- "SLURP!" comic burst (top-right) -->
+  <g transform="translate(320 95) rotate(15)">
+    <path d="M-50 0 L-32 -24 L-18 -14 L-4 -28 L8 -10 L24 -24 L34 -6 L48 -18 L54 4 L40 18 L22 14 L8 28 L-10 18 L-22 28 L-36 14 L-52 22 Z"
+          fill="#ff4757" stroke="#1a1a1a" stroke-width="3"/>
+    <text y="6" text-anchor="middle" font-family="Impact, sans-serif" font-size="22" font-weight="900" fill="white">SLURP!</text>
+  </g>
+
+  <!-- "CRUNCH!" comic burst (bottom-right) -->
+  <g transform="translate(315 410) rotate(-8)">
+    <path d="M-54 0 L-34 -26 L-20 -14 L-3 -32 L10 -10 L28 -26 L38 -6 L54 -20 L60 6 L44 22 L24 16 L8 32 L-12 22 L-26 32 L-42 16 L-58 26 Z"
+          fill="#4ec5d4" stroke="#1a1a1a" stroke-width="3"/>
+    <text y="6" text-anchor="middle" font-family="Impact, sans-serif" font-size="22" font-weight="900" fill="#1a1a1a">CRUNCH!</text>
+  </g>
+
+  <!-- Crumbs scattered -->
+  <g fill="#c3753a">
+    <circle cx="60" cy="380" r="2.5"/>
+    <circle cx="80" cy="395" r="2"/>
+    <circle cx="100" cy="380" r="3"/>
+    <circle cx="120" cy="400" r="2"/>
+    <circle cx="140" cy="385" r="2.5"/>
+    <circle cx="50" cy="410" r="2"/>
+    <circle cx="35" cy="380" r="2"/>
+  </g>
+
+  <!-- Fork crossed with spoon (bottom-left, like a flag) -->
+  <g transform="translate(60 440) rotate(-20)">
+    <!-- Fork -->
+    <rect x="-2" y="0" width="4" height="50" fill="#d0d0d0" stroke="#1a1a1a" stroke-width="1"/>
+    <g fill="#d0d0d0" stroke="#1a1a1a" stroke-width="1">
+      <rect x="-7" y="-18" width="3" height="18"/>
+      <rect x="-2" y="-22" width="3" height="22"/>
+      <rect x="3" y="-22" width="3" height="22"/>
+      <rect x="8" y="-18" width="3" height="18"/>
+    </g>
+  </g>
+  <g transform="translate(60 440) rotate(20)">
+    <!-- Spoon -->
+    <rect x="-2" y="0" width="4" height="50" fill="#d0d0d0" stroke="#1a1a1a" stroke-width="1"/>
+    <ellipse cx="0" cy="-12" rx="9" ry="14" fill="#d0d0d0" stroke="#1a1a1a" stroke-width="1"/>
+    <ellipse cx="-3" cy="-15" rx="3" ry="5" fill="#fff" opacity="0.5"/>
+  </g>
+</svg>`.trim();
+
+    const SVG_THODORIS = `
+<svg viewBox="0 0 400 500" preserveAspectRatio="xMidYMid slice" xmlns="http://www.w3.org/2000/svg">
+  <defs>
+    <linearGradient id="thSky" x1="0" y1="0" x2="0" y2="1">
+      <stop offset="0%" stop-color="#fde4b5"/>
+      <stop offset="35%" stop-color="#f4c08a"/>
+      <stop offset="70%" stop-color="#a8d8ea"/>
+      <stop offset="100%" stop-color="#5aabd5"/>
+    </linearGradient>
+    <linearGradient id="thSea" x1="0" y1="0" x2="0" y2="1">
+      <stop offset="0%" stop-color="#4a9bc7"/>
+      <stop offset="100%" stop-color="#1f5a7a"/>
+    </linearGradient>
+    <linearGradient id="thPool" x1="0" y1="0" x2="0" y2="1">
+      <stop offset="0%" stop-color="#9ed6e8"/>
+      <stop offset="100%" stop-color="#4a9bc7"/>
+    </linearGradient>
+    <radialGradient id="thSun" cx="0.5" cy="0.5">
+      <stop offset="0%" stop-color="#fff5b0"/>
+      <stop offset="60%" stop-color="#ffe580" stop-opacity="0.5"/>
+      <stop offset="100%" stop-color="#ffe580" stop-opacity="0"/>
+    </radialGradient>
+  </defs>
+
+  <!-- Sky -->
+  <rect width="400" height="290" fill="url(#thSky)"/>
+
+  <!-- Sun glow -->
+  <circle cx="305" cy="100" r="80" fill="url(#thSun)"/>
+  <circle cx="305" cy="100" r="26" fill="#fff5b0"/>
+  <circle cx="305" cy="100" r="20" fill="#fff8cc"/>
+
+  <!-- Distant island silhouettes -->
+  <path d="M0 268 Q40 248 80 258 Q110 250 140 260 L180 265 Q230 252 280 263 Q320 258 360 265 L400 268 L400 295 L0 295 Z" fill="#7a98a8" opacity="0.55"/>
+  <path d="M40 280 Q90 268 140 278 Q200 272 260 280 Q310 274 360 282 L400 285 L400 295 L0 295 L0 285 Z" fill="#5a7d8e" opacity="0.5"/>
+
+  <!-- Sea -->
+  <rect y="290" width="400" height="100" fill="url(#thSea)"/>
+  <g fill="white" opacity="0.45">
+    <ellipse cx="40"  cy="300" rx="14" ry="1.3"/>
+    <ellipse cx="100" cy="318" rx="10" ry="1"/>
+    <ellipse cx="170" cy="306" rx="16" ry="1.3"/>
+    <ellipse cx="240" cy="325" rx="9"  ry="1"/>
+    <ellipse cx="310" cy="312" rx="18" ry="1.5"/>
+    <ellipse cx="370" cy="328" rx="11" ry="1"/>
+    <ellipse cx="60"  cy="340" rx="20" ry="1.4"/>
+    <ellipse cx="200" cy="350" rx="15" ry="1.2"/>
+    <ellipse cx="330" cy="345" rx="12" ry="1"/>
+  </g>
+
+  <!-- Cypress trees (left foreground) -->
+  <g transform="translate(40 230)">
+    <path d="M0 0 Q-9 -60 0 -105 Q9 -60 0 0" fill="#2e5e3d"/>
+    <path d="M-3 -90 Q0 -100 3 -90 L3 -50 Q0 -45 -3 -50 Z" fill="#3a7a4f" opacity="0.7"/>
+    <rect x="-3" y="0" width="6" height="14" fill="#5a3a25"/>
+  </g>
+  <g transform="translate(72 245)">
+    <path d="M0 0 Q-7 -50 0 -88 Q7 -50 0 0" fill="#2e5e3d"/>
+    <rect x="-2.5" y="0" width="5" height="10" fill="#5a3a25"/>
+  </g>
+
+  <!-- White-washed building (right) -->
+  <g transform="translate(215 110)">
+    <!-- Main wall -->
+    <rect x="0" y="35" width="160" height="135" fill="white" stroke="#e0e0e0" stroke-width="1"/>
+    <!-- Side wall (perspective hint) -->
+    <path d="M0 35 L-12 55 L-12 175 L0 170 Z" fill="#f0eee9"/>
+
+    <!-- Blue dome -->
+    <path d="M28 38 Q60 -18 92 38 Z" fill="#3a8aae" stroke="#1f5a7a" stroke-width="1.5"/>
+    <ellipse cx="60" cy="38" rx="32" ry="3" fill="#1f5a7a"/>
+    <!-- Cross -->
+    <line x1="60" y1="-18" x2="60" y2="-32" stroke="#1a1a1a" stroke-width="2.5"/>
+    <line x1="52" y1="-27" x2="68" y2="-27" stroke="#1a1a1a" stroke-width="2.5"/>
+
+    <!-- Door with arch -->
+    <path d="M62 110 L62 165 L98 165 L98 110 Q98 92 80 92 Q62 92 62 110 Z" fill="#3a8aae" stroke="#1f5a7a" stroke-width="1.5"/>
+    <rect x="78" y="125" width="3" height="3" fill="#fff200"/>
+
+    <!-- Windows with blue shutters -->
+    <rect x="22" y="68" width="22" height="28" fill="#1f5a7a"/>
+    <rect x="22" y="68" width="11" height="28" fill="#3a8aae"/>
+    <line x1="33" y1="68" x2="33" y2="96" stroke="#1f5a7a" stroke-width="0.5"/>
+
+    <rect x="120" y="68" width="22" height="28" fill="#1f5a7a"/>
+    <rect x="120" y="68" width="11" height="28" fill="#3a8aae"/>
+    <line x1="131" y1="68" x2="131" y2="96" stroke="#1f5a7a" stroke-width="0.5"/>
+
+    <!-- Small upper windows -->
+    <rect x="40" y="118" width="14" height="18" fill="#3a8aae"/>
+    <rect x="106" y="118" width="14" height="18" fill="#3a8aae"/>
+
+    <!-- Bougainvillea on left -->
+    <g transform="translate(8 90)">
+      <circle r="4" fill="#e84a8a"/>
+      <circle cx="-5" cy="3" r="3.5" fill="#ff6b9d"/>
+      <circle cx="3" cy="7" r="3" fill="#e84a8a"/>
+      <circle cx="6" cy="-4" r="3.5" fill="#ff6b9d"/>
+      <circle cx="-3" cy="-6" r="3" fill="#c93570"/>
+      <circle cx="9" cy="3" r="3" fill="#e84a8a"/>
+      <circle cx="-7" cy="10" r="3" fill="#ff6b9d"/>
+    </g>
+
+    <!-- Tiny terracotta pot at door -->
+    <path d="M104 165 L108 165 L107 172 L105 172 Z" fill="#c3753a"/>
+    <circle cx="106" cy="162" r="3" fill="#3a7a4f"/>
+  </g>
+
+  <!-- Infinity pool foreground -->
+  <rect y="380" width="400" height="120" fill="#ebe0c5"/>
+  <rect y="385" width="400" height="55" fill="url(#thPool)"/>
+  <!-- Pool edge highlight (the "infinity" edge) -->
+  <rect y="383" width="400" height="2.5" fill="white" opacity="0.8"/>
+  <rect y="439" width="400" height="3" fill="#a8957a"/>
+
+  <!-- Pool reflections -->
+  <g fill="white" opacity="0.55">
+    <ellipse cx="80"  cy="405" rx="22" ry="1.3"/>
+    <ellipse cx="160" cy="420" rx="18" ry="1.2"/>
+    <ellipse cx="260" cy="408" rx="25" ry="1.4"/>
+    <ellipse cx="340" cy="425" rx="20" ry="1.2"/>
+  </g>
+
+  <!-- Lounger -->
+  <g transform="translate(50 460)">
+    <rect width="90" height="7" fill="white" rx="3" stroke="#c0b59a" stroke-width="0.5"/>
+    <rect x="2" y="1.5" width="86" height="4" fill="#3a8aae" rx="1"/>
+    <rect x="2" y="7" width="3" height="10" fill="white"/>
+    <rect x="85" y="7" width="3" height="10" fill="white"/>
+  </g>
+
+  <!-- Cocktail on a small table -->
+  <g transform="translate(160 460)">
+    <rect x="-2" y="0" width="4" height="12" fill="#a8957a"/>
+    <rect x="-10" y="-3" width="20" height="4" fill="#c0b59a"/>
+    <path d="M-6 -16 L-7 -5 L7 -5 L6 -16 Z" fill="white" opacity="0.6" stroke="#a8957a" stroke-width="0.7"/>
+    <path d="M-5 -15 L-6 -7 L6 -7 L5 -15 Z" fill="#ffc3a8"/>
+    <line x1="2" y1="-17" x2="6" y2="-26" stroke="#3a7a4f" stroke-width="1.2"/>
+    <ellipse cx="6" cy="-25" rx="2" ry="3" fill="#3a7a4f"/>
+  </g>
+</svg>`.trim();
+
+    const SVG_THODORIS_AVATAR = `
+<svg viewBox="0 0 96 96" xmlns="http://www.w3.org/2000/svg">
+  <defs>
+    <linearGradient id="avSky" x1="0" y1="0" x2="0" y2="1">
+      <stop offset="0%" stop-color="#fde4b5"/>
+      <stop offset="100%" stop-color="#a8d8ea"/>
+    </linearGradient>
+  </defs>
+  <rect width="96" height="96" fill="url(#avSky)"/>
+  <rect y="60" width="96" height="36" fill="#4a9bc7"/>
+  <rect x="20" y="40" width="48" height="35" fill="white"/>
+  <path d="M28 40 Q44 18 60 40 Z" fill="#3a8aae"/>
+  <rect x="38" y="55" width="12" height="20" fill="#3a8aae"/>
+  <rect x="26" y="48" width="6" height="8" fill="#3a8aae"/>
+  <rect x="56" y="48" width="6" height="8" fill="#3a8aae"/>
+  <circle cx="78" cy="22" r="9" fill="#fff5b0"/>
+</svg>`.trim();
+
+    // ==================== APARTMENT DATA ====================
+
+    const apartments = [
+      {
+        name: "Tourist Trap Towers",
+        age: 35,
+        location: "Right next to the cruise ship dock",
+        tagline: '"100% AUTHENTIC GREEK EXPERIENCE™"',
+        bio: [
+          ["🗽", "47 plastic Parthenons (decorative)"],
+          ["👕", "Bedsheets feature the I ♥ GREECE logo"],
+          ["🚢", "Hourly visits from souvenir hawkers"],
+          ["🥤", "Free ouzo shot with every selfie posted"]
+        ],
+        svg: SVG_TOURIST_TRAP,
+        nopeToast: "Wise. Even the cruise ship was leaving.",
+        likeToast: "…are you sure? Moving on anyway.",
+      },
+      {
+        name: "Chompy's Crunch Pad",
+        age: 48,
+        location: "Above a crisp factory, somewhere loud",
+        tagline: '"Where every meal is a SYMPHONY 🎺"',
+        bio: [
+          ["🍽️", "Mandatory shared dining — mouths open, please"],
+          ["👨", "Roommate Gary: career open-mouth chewer"],
+          ["🔊", "Acoustically tuned for maximum munch echo"],
+          ["🎧", "24/7 ASMR eating-sounds playlist"]
+        ],
+        svg: SVG_CHOMPYS,
+        nopeToast: "Thank god. Gary was already buttering his crisps.",
+        likeToast: "Bold choice. Earplugs not included.",
+      },
+      {
+        name: "Thodoris Infinity View",
+        age: "∞",
+        location: "Symi, Greece 🇬🇷",
+        tagline: '"Sea views. Silence. Serenity."',
+        bio: [
+          ["🌊", "Private balcony over the Aegean"],
+          ["🤫", "Zero tourist hawkers within shouting distance"],
+          ["🚫", "No Gary. No Linda. No communal anything."],
+          ["🎂", "Birthday-girl approved"]
+        ],
+        svg: SVG_THODORIS,
+        lockedToRight: true,
+        leftToast: "Don't be silly — swipe right →",
+      }
+    ];
+
+    // ==================== STATE & FLOW ====================
+
+    let currentIndex = 0;
+    let currentCardEl = null;
+
+    function showScreen(id) {
+      document.querySelectorAll('.screen').forEach(s => s.classList.remove('active'));
+      document.getElementById(id).classList.add('active');
+    }
+
+    function goToCards() {
+      showScreen('card-screen');
+      currentIndex = 0;
+      renderCard();
+    }
+
+    function renderCard() {
+      const stack = document.getElementById('card-stack');
+      stack.innerHTML = '';
+
+      if (currentIndex >= apartments.length) {
+        // Shouldn't reach here, but just in case
+        stack.innerHTML = '<div style="display:flex;align-items:center;justify-content:center;height:100%;color:#888;text-align:center;padding:30px;font-size:15px;">That\u2019s everyone! Hmm.</div>';
+        return;
+      }
+
+      const apt = apartments[currentIndex];
+
+      const card = document.createElement('div');
+      card.className = 'card';
+      card.innerHTML = `
+        <div class="card-image">
+          ${apt.svg}
+          <div class="card-stamp card-stamp-like">Like</div>
+          <div class="card-stamp card-stamp-nope">Nope</div>
+          <div class="card-overlay">
+            <div class="card-name">${apt.name}<span class="card-age">${apt.age}</span></div>
+            <div class="card-location">📍 ${apt.location}</div>
+          </div>
+        </div>
+        <div class="card-details">
+          <div class="card-tagline">${apt.tagline}</div>
+          <ul class="card-bio">
+            ${apt.bio.map(([icon, text]) => `<li><span class="icon">${icon}</span>${text}</li>`).join('')}
+          </ul>
+        </div>
+      `;
+
+      stack.appendChild(card);
+      currentCardEl = card;
+      attachDragHandlers(card);
+    }
+
+    // ==================== DRAG / SWIPE ====================
+
+    function attachDragHandlers(card) {
+      let dragging = false, startX = 0, startY = 0, dx = 0, dy = 0;
+      const likeStamp = card.querySelector('.card-stamp-like');
+      const nopeStamp = card.querySelector('.card-stamp-nope');
+
+      const onDown = (e) => {
+        if (card.classList.contains('fly-left') || card.classList.contains('fly-right')) return;
+        dragging = true;
+        const point = e.touches ? e.touches[0] : e;
+        startX = point.clientX;
+        startY = point.clientY;
+        dx = 0; dy = 0;
+        card.classList.add('dragging');
+      };
+
+      const onMove = (e) => {
+        if (!dragging) return;
+        const point = e.touches ? e.touches[0] : e;
+        dx = point.clientX - startX;
+        dy = point.clientY - startY;
+        card.style.transform = `translate(${dx}px, ${dy * 0.3}px) rotate(${dx / 18}deg)`;
+        likeStamp.style.opacity = Math.max(0, Math.min(dx / 90, 1));
+        nopeStamp.style.opacity = Math.max(0, Math.min(-dx / 90, 1));
+        if (e.cancelable) e.preventDefault();
+      };
+
+      const onUp = () => {
+        if (!dragging) return;
+        dragging = false;
+        card.classList.remove('dragging');
+        if (Math.abs(dx) > 90) {
+          handleSwipe(dx > 0 ? 'right' : 'left');
+        } else {
+          card.style.transform = '';
+          likeStamp.style.opacity = 0;
+          nopeStamp.style.opacity = 0;
+        }
+      };
+
+      card.addEventListener('mousedown', onDown);
+      window.addEventListener('mousemove', onMove);
+      window.addEventListener('mouseup', onUp);
+
+      card.addEventListener('touchstart', onDown, { passive: true });
+      window.addEventListener('touchmove', onMove, { passive: false });
+      window.addEventListener('touchend', onUp);
+    }
+
+    function buttonSwipe(direction) {
+      if (!currentCardEl) return;
+      handleSwipe(direction);
+    }
+
+    function handleSwipe(direction) {
+      const apt = apartments[currentIndex];
+      const card = currentCardEl;
+      if (!card) return;
+
+      // Locked card: reject left swipe with shake + toast
+      if (apt.lockedToRight && direction === 'left') {
+        card.style.transform = '';
+        card.querySelector('.card-stamp-like').style.opacity = 0;
+        card.querySelector('.card-stamp-nope').style.opacity = 0;
+        card.classList.remove('shake');
+        // trigger reflow so animation restarts
+        void card.offsetWidth;
+        card.classList.add('shake');
+        showToast(apt.leftToast);
+        return;
+      }
+
+      // Locked card: right swipe = MATCH
+      if (apt.lockedToRight && direction === 'right') {
+        card.classList.add('fly-right');
+        setTimeout(showMatch, 350);
+        return;
+      }
+
+      // Normal swipe: fly off, show toast, advance
+      const msg = direction === 'right' ? apt.likeToast : apt.nopeToast;
+      card.classList.add(direction === 'right' ? 'fly-right' : 'fly-left');
+      showToast(msg);
+      setTimeout(() => {
+        currentIndex++;
+        renderCard();
+      }, 380);
+    }
+
+    // ==================== TOAST ====================
+
+    let toastTimer;
+    function showToast(message) {
+      const t = document.getElementById('toast');
+      t.textContent = message;
+      t.classList.add('visible');
+      clearTimeout(toastTimer);
+      toastTimer = setTimeout(() => t.classList.remove('visible'), 2200);
+    }
+
+    // ==================== MATCH SCREEN ====================
+
+    function showMatch() {
+      document.getElementById('match-apt-avatar').innerHTML = SVG_THODORIS_AVATAR;
+      showScreen('match-screen');
+      launchConfetti();
+    }
+
+    function launchConfetti() {
+      const colors = ['#fd297b', '#ff5864', '#ffd700', '#4ec5d4', '#fff', '#4ddc77'];
+      const container = document.getElementById('match-screen');
+      // clear any old confetti
+      container.querySelectorAll('.confetti').forEach(c => c.remove());
+
+      for (let i = 0; i < 60; i++) {
+        const c = document.createElement('div');
+        c.className = 'confetti';
+        c.style.left = Math.random() * 100 + '%';
+        c.style.background = colors[Math.floor(Math.random() * colors.length)];
+        c.style.animationDuration = (2 + Math.random() * 2) + 's';
+        c.style.animationDelay = Math.random() * 1.5 + 's';
+        c.style.transform = `rotate(${Math.random() * 360}deg)`;
+        if (Math.random() > 0.5) {
+          c.style.borderRadius = '50%';
+          c.style.width = '10px';
+          c.style.height = '10px';
+        }
+        container.appendChild(c);
+      }
+    }
+
+    // Prevent double-tap zoom on iOS
+    let lastTouch = 0;
+    document.addEventListener('touchend', (e) => {
+      const now = Date.now();
+      if (now - lastTouch < 300) e.preventDefault();
+      lastTouch = now;
+    }, { passive: false });
+  </script>
+</body>
+</html>
